@@ -85,8 +85,9 @@ def load_data():
     """Load all outputs from Google Drive or local path."""
     # Try Drive first, fall back to local
     paths = [
+               'data/',
         '/content/drive/MyDrive/portfolio_project/',
-        './'
+             './'
     ]
     base = None
     for p in paths:
