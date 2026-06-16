@@ -263,7 +263,7 @@ if page == "🏠  Overview":
     fig.add_trace(go.Scatter(x=nb.index, y=nb.values, name='Nifty 50',
                              line=dict(width=2.5, color='white', dash='dash')))
     fig.update_layout(**PLOTLY_LAYOUT, height=420,
-                      legend=dict(**PLOTLY_LAYOUT['legend'], orientation='h', y=1.05),
+                      legend=dict(bgcolor=BG_CARD, bordercolor=BORDER, borderwidth=0.5, orientation='h', y=1.05),
                       yaxis_title='Indexed (base=100)', hovermode='x unified')
     st.plotly_chart(fig, use_container_width=True)
 
@@ -296,7 +296,7 @@ elif page == "⚠️  Risk Analytics":
             fig.add_trace(go.Scatter(x=rv.index, y=rv[s], name=s,
                                      line=dict(width=1.5, color=PLOTLY_COLORS[i])))
         fig.update_layout(**PLOTLY_LAYOUT, height=340, yaxis_title='Vol (%)',
-                          hovermode='x unified', legend=dict(**PLOTLY_LAYOUT['legend'], orientation='h', y=1.1))
+                          hovermode='x unified', legend=dict(bgcolor=BG_CARD, bordercolor=BORDER, borderwidth=0.5, orientation='h', y=1.1))
         st.plotly_chart(fig, use_container_width=True)
 
     with col2:
@@ -309,7 +309,7 @@ elif page == "⚠️  Risk Analytics":
                                      line=dict(width=1.5, color=PLOTLY_COLORS[i]),
                                      fill='tozeroy', opacity=0.5))
         fig.update_layout(**PLOTLY_LAYOUT, height=340, yaxis_title='Drawdown (%)',
-                          hovermode='x unified', legend=dict(**PLOTLY_LAYOUT['legend'], orientation='h', y=1.1))
+                          hovermode='x unified', legend=dict(bgcolor=BG_CARD, bordercolor=BORDER, borderwidth=0.5, orientation='h', y=1.1))
         st.plotly_chart(fig, use_container_width=True)
 
     st.divider()
@@ -383,7 +383,7 @@ elif page == "🎯  Optimization":
         line=dict(dash='dash',color=GOLD_DIM,width=1.5),name='Capital Market Line',opacity=0.7))
     fig.update_layout(**PLOTLY_LAYOUT, height=550,
                       xaxis_title='Annual Volatility (%)', yaxis_title='Annual Return (%)',
-                      legend=dict(**PLOTLY_LAYOUT['legend'], orientation='h', y=-0.15))
+                      legend=dict(bgcolor=BG_CARD, bordercolor=BORDER, borderwidth=0.5, orientation='h', y=-0.15))
     st.plotly_chart(fig, use_container_width=True)
 
     st.divider()
@@ -434,7 +434,7 @@ elif page == "🎯  Optimization":
                   annotation_text='COVID crash',annotation_font_color=TEXT_SEC)
     fig.update_layout(**PLOTLY_LAYOUT, height=400, yaxis_title='Cumulative Return (%)',
                       hovermode='x unified',
-                      legend=dict(**PLOTLY_LAYOUT['legend'], orientation='h', y=1.1))
+                      legend=dict(bgcolor=BG_CARD, bordercolor=BORDER, borderwidth=0.5, orientation='h', y=1.1))
     st.plotly_chart(fig, use_container_width=True)
     st.caption("⚠️ In-sample backtest: weights derived from same period. For illustrative purposes only.")
 
@@ -475,7 +475,7 @@ elif page == "🏛️  Macro Overlay":
     fig.add_vrect(x0=pd_,x1=log_returns.index[-1],fillcolor=rmap.get(pr_,'white'),layer='below',line_width=0)
 
     fig.update_layout(**PLOTLY_LAYOUT, height=420, hovermode='x unified',
-                      legend=dict(**PLOTLY_LAYOUT['legend'],orientation='h',y=1.1))
+                      legend=dict(bgcolor=BG_CARD, bordercolor=BORDER, borderwidth=0.5, orientation='h', y=1.1))
     fig.update_yaxes(title_text='Nifty 50 (indexed)',secondary_y=False,
                      gridcolor=BORDER,zerolinecolor=BORDER)
     fig.update_yaxes(title_text='Repo Rate (%)',secondary_y=True,range=[3,8],
@@ -496,7 +496,7 @@ elif page == "🏛️  Macro Overlay":
         fig = px.bar(sector_regime_alloc.T, barmode='group',
                      color_discrete_sequence=PLOTLY_COLORS)
         fig.update_layout(**PLOTLY_LAYOUT, height=300, yaxis_title='Allocation (%)',
-                          legend=dict(**PLOTLY_LAYOUT['legend'],orientation='h',y=1.1))
+                          legend=dict(bgcolor=BG_CARD, bordercolor=BORDER, borderwidth=0.5, orientation='h', y=1.1))
         st.plotly_chart(fig, use_container_width=True)
 
     if regime_metrics is not None:
