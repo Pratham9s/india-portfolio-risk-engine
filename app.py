@@ -108,7 +108,7 @@ PLOTLY_LAYOUT = dict(
     xaxis=dict(gridcolor=BORDER, zerolinecolor=BORDER, linecolor=BORDER),
     yaxis=dict(gridcolor=BORDER, zerolinecolor=BORDER, linecolor=BORDER),
     margin=dict(l=0, r=0, t=10, b=0),
-    legend=dict(bgcolor=BG_CARD, bordercolor=BORDER, borderwidth=0.5),
+
     colorway=PLOTLY_COLORS,
 )
 
