@@ -1,6 +1,7 @@
 """
 Indian Equity Portfolio Risk & Optimization Engine
 Streamlit Dashboard — Phase 5
+Theme: Dark Navy & Gold
 """
 
 import streamlit as st
@@ -22,25 +23,94 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# ── Custom CSS ────────────────────────────────────────────────────────────
-st.markdown("""
+# ── Theme: Dark Navy & Gold ───────────────────────────────────────────────
+GOLD    = "#c9a84c"
+GOLD_DIM = "#8a6f2e"
+BG_MAIN  = "#0d1117"
+BG_CARD  = "#161b22"
+BG_DEEP  = "#0d1117"
+BORDER   = "#30363d"
+TEXT_PRI = "#f0f6fc"
+TEXT_SEC = "#8b949e"
+ACCENT1  = "#58a6ff"
+ACCENT2  = "#3fb950"
+ACCENT3  = "#f78166"
+ACCENT4  = "#a78bfa"
+
+PLOTLY_COLORS = [GOLD, ACCENT1, ACCENT2, ACCENT3, ACCENT4, "#ffa657", "#79c0ff", "#56d364"]
+
+st.markdown(f"""
 <style>
-    .main { background-color: #0f1117; }
-    .block-container { padding-top: 1.5rem; }
-    .section-header {
-        color: #c9a84c;
-        font-size: 1.1rem;
-        font-weight: 600;
-        border-bottom: 1px solid #2d3250;
-        padding-bottom: 0.4rem;
-        margin-bottom: 1rem;
-    }
-    .regime-tag-cut  { background:#1a4d2e; color:#4ade80; padding:2px 10px; border-radius:12px; font-size:0.8rem; }
-    .regime-tag-hike { background:#4d1a1a; color:#f87171; padding:2px 10px; border-radius:12px; font-size:0.8rem; }
-    .regime-tag-hold { background:#3d3a1a; color:#fbbf24; padding:2px 10px; border-radius:12px; font-size:0.8rem; }
-    div[data-testid="stMetric"] { background:#1e2130; border-radius:8px; padding:0.8rem; border:1px solid #2d3250; }
+  /* ── Global ── */
+  .stApp {{ background-color: {BG_MAIN}; }}
+  .block-container {{ padding-top: 1.5rem; padding-bottom: 2rem; }}
+  section[data-testid="stSidebar"] {{ background-color: #010409; border-right: 0.5px solid {BORDER}; }}
+
+  /* ── Metrics ── */
+  div[data-testid="stMetric"] {{
+    background: {BG_CARD};
+    border: 0.5px solid {BORDER};
+    border-top: 2px solid {GOLD};
+    border-radius: 8px;
+    padding: 1rem 1.1rem 0.8rem;
+  }}
+  div[data-testid="stMetricLabel"] {{ color: {TEXT_SEC} !important; font-size: 0.72rem !important; letter-spacing: 0.08em; text-transform: uppercase; }}
+  div[data-testid="stMetricValue"] {{ color: {TEXT_PRI} !important; font-size: 1.6rem !important; font-weight: 600 !important; }}
+  div[data-testid="stMetricDelta"] {{ color: {GOLD} !important; font-size: 0.8rem !important; }}
+
+  /* ── Section headers ── */
+  .section-header {{
+    color: {GOLD};
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-bottom: 0.5px solid {BORDER};
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+  }}
+
+  /* ── Tabs ── */
+  .stTabs [data-baseweb="tab-list"] {{ background: {BG_CARD}; border-radius: 8px; border: 0.5px solid {BORDER}; }}
+  .stTabs [data-baseweb="tab"] {{ color: {TEXT_SEC}; }}
+  .stTabs [aria-selected="true"] {{ color: {GOLD} !important; border-bottom: 2px solid {GOLD} !important; }}
+
+  /* ── Selectbox / Multiselect ── */
+  .stMultiSelect [data-baseweb="tag"] {{ background: {GOLD_DIM}22; border: 0.5px solid {GOLD_DIM}; }}
+  div[data-baseweb="select"] {{ background: {BG_CARD}; }}
+
+  /* ── Sidebar radio ── */
+  .stRadio label {{ color: {TEXT_SEC}; font-size: 0.9rem; }}
+  .stRadio [data-testid="stMarkdownContainer"] p {{ color: {TEXT_PRI}; }}
+
+  /* ── Dividers ── */
+  hr {{ border-color: {BORDER}; opacity: 0.5; }}
+
+  /* ── Dataframe ── */
+  .stDataFrame {{ background: {BG_CARD}; border: 0.5px solid {BORDER}; border-radius: 8px; }}
+
+  /* ── Regime tags ── */
+  .tag-cut  {{ background:#1a3a1a; color:#3fb950; padding:3px 12px; border-radius:12px; font-size:0.78rem; font-weight:500; border:0.5px solid #3fb95066; }}
+  .tag-hike {{ background:#3a1a1a; color:#f78166; padding:3px 12px; border-radius:12px; font-size:0.78rem; font-weight:500; border:0.5px solid #f7816666; }}
+  .tag-hold {{ background:#3a300a; color:{GOLD};   padding:3px 12px; border-radius:12px; font-size:0.78rem; font-weight:500; border:0.5px solid {GOLD}66; }}
+
+  /* ── Caption / info ── */
+  .stAlert {{ background: {BG_CARD}; border: 0.5px solid {BORDER}; border-left: 3px solid {GOLD}; border-radius:8px; color:{TEXT_PRI}; }}
 </style>
 """, unsafe_allow_html=True)
+
+# ── Plotly dark navy gold template ────────────────────────────────────────
+PLOTLY_LAYOUT = dict(
+    template="plotly_dark",
+    paper_bgcolor=BG_CARD,
+    plot_bgcolor=BG_CARD,
+    font=dict(color=TEXT_PRI, family="Inter, sans-serif", size=12),
+    xaxis=dict(gridcolor=BORDER, zerolinecolor=BORDER, linecolor=BORDER),
+    yaxis=dict(gridcolor=BORDER, zerolinecolor=BORDER, linecolor=BORDER),
+    margin=dict(l=0, r=0, t=10, b=0),
+    legend=dict(bgcolor=BG_CARD, bordercolor=BORDER, borderwidth=0.5),
+    colorway=PLOTLY_COLORS,
+)
 
 # ── Constants ─────────────────────────────────────────────────────────────
 TRADING_DAYS          = 250
@@ -61,142 +131,118 @@ SECTOR_MAP = {
     'COALINDIA':'Materials','ADANIENT':'Materials','UPL':'Materials',
 }
 
-# ── RBI rate changes — defined globally so all pages can access it ─────────
 RBI_RATE_CHANGES = [
-    ('2019-01-01', 6.50, 'HOLD'), ('2019-02-07', 6.25, 'CUT'),
-    ('2019-04-04', 6.00, 'CUT'),  ('2019-06-06', 5.75, 'CUT'),
-    ('2019-08-07', 5.40, 'CUT'),  ('2019-10-04', 5.15, 'CUT'),
-    ('2019-12-05', 5.15, 'HOLD'), ('2020-03-27', 4.40, 'CUT'),
-    ('2020-05-22', 4.00, 'CUT'),  ('2020-10-09', 4.00, 'HOLD'),
-    ('2021-01-01', 4.00, 'HOLD'), ('2022-05-04', 4.40, 'HIKE'),
-    ('2022-06-08', 4.90, 'HIKE'), ('2022-08-05', 5.40, 'HIKE'),
-    ('2022-09-30', 5.90, 'HIKE'), ('2022-12-07', 6.25, 'HIKE'),
-    ('2023-02-08', 6.50, 'HIKE'), ('2023-04-06', 6.50, 'HOLD'),
-    ('2024-01-01', 6.50, 'HOLD'), ('2025-02-07', 6.25, 'CUT'),
-    ('2025-04-09', 6.00, 'CUT'),
+    ('2019-01-01',6.50,'HOLD'),('2019-02-07',6.25,'CUT'),('2019-04-04',6.00,'CUT'),
+    ('2019-06-06',5.75,'CUT'),('2019-08-07',5.40,'CUT'),('2019-10-04',5.15,'CUT'),
+    ('2019-12-05',5.15,'HOLD'),('2020-03-27',4.40,'CUT'),('2020-05-22',4.00,'CUT'),
+    ('2020-10-09',4.00,'HOLD'),('2021-01-01',4.00,'HOLD'),('2022-05-04',4.40,'HIKE'),
+    ('2022-06-08',4.90,'HIKE'),('2022-08-05',5.40,'HIKE'),('2022-09-30',5.90,'HIKE'),
+    ('2022-12-07',6.25,'HIKE'),('2023-02-08',6.50,'HIKE'),('2023-04-06',6.50,'HOLD'),
+    ('2024-01-01',6.50,'HOLD'),('2025-02-07',6.25,'CUT'),('2025-04-09',6.00,'CUT'),
 ]
 
-# ── Helper: build daily regime series ────────────────────────────────────
 def build_regime_series(index):
-    rbi_df = pd.DataFrame(RBI_RATE_CHANGES, columns=['date', 'rate', 'regime'])
+    rbi_df = pd.DataFrame(RBI_RATE_CHANGES, columns=['date','rate','regime'])
     rbi_df['date'] = pd.to_datetime(rbi_df['date'])
-    daily = rbi_df.set_index('date')
-    full_range = pd.date_range(index[0], index[-1], freq='D')
-    daily_rate   = daily['rate'].reindex(full_range).ffill()
-    daily_regime = daily['regime'].reindex(full_range).ffill()
-    return daily_rate.reindex(index).ffill(), daily_regime.reindex(index).ffill()
+    full  = pd.date_range(index[0], index[-1], freq='D')
+    rate  = rbi_df.set_index('date')['rate'].reindex(full).ffill()
+    reg   = rbi_df.set_index('date')['regime'].reindex(full).ffill()
+    return rate.reindex(index).ffill(), reg.reindex(index).ffill()
 
 # ── Data loading ──────────────────────────────────────────────────────────
 @st.cache_data
 def load_data():
-    # Try data/ folder first (Streamlit Cloud), then Drive, then local
-    paths = [
-        'data/',
-        '/content/drive/MyDrive/portfolio_project/',
-        './'
-    ]
-    base = None
+    paths = ['data/', '/content/drive/MyDrive/portfolio_project/', './']
+    base  = None
     for p in paths:
         try:
             pd.read_csv(p + 'log_returns.csv', nrows=1)
-            base = p
-            break
-        except:
-            continue
-
+            base = p; break
+        except: continue
     if base is None:
         st.error('Data not found. Expected a data/ folder with CSV files.')
         st.stop()
 
-    log_returns       = pd.read_csv(base + 'log_returns.csv',       index_col=0, parse_dates=True)
-    prices_clean      = pd.read_csv(base + 'prices_clean.csv',      index_col=0, parse_dates=True)
-    benchmark_returns = pd.read_csv(base + 'benchmark_returns.csv', index_col=0, parse_dates=True).squeeze()
-    risk_metrics      = pd.read_csv(base + 'risk_metrics.csv',      index_col=0)
-    optimized_weights = pd.read_csv(base + 'optimized_weights.csv', index_col=0)
-    portfolio_comparison = pd.read_csv(base + 'portfolio_comparison.csv', index_col=0)
-
+    lr   = pd.read_csv(base+'log_returns.csv',       index_col=0, parse_dates=True)
+    pc   = pd.read_csv(base+'prices_clean.csv',      index_col=0, parse_dates=True)
+    br   = pd.read_csv(base+'benchmark_returns.csv', index_col=0, parse_dates=True).squeeze()
+    rm   = pd.read_csv(base+'risk_metrics.csv',      index_col=0)
+    ow   = pd.read_csv(base+'optimized_weights.csv', index_col=0)
+    pco  = pd.read_csv(base+'portfolio_comparison.csv', index_col=0)
     try:
-        regime_weights      = pd.read_csv(base + 'regime_weights.csv',           index_col=0)
-        sector_regime_df    = pd.read_csv(base + 'sector_regime_returns.csv',    index_col=0)
-        sector_regime_alloc = pd.read_csv(base + 'sector_regime_allocation.csv', index_col=0)
-        regime_metrics      = pd.read_csv(base + 'regime_metrics.csv',           index_col=0)
-    except:
-        regime_weights = sector_regime_df = sector_regime_alloc = regime_metrics = None
+        rw  = pd.read_csv(base+'regime_weights.csv',           index_col=0)
+        srd = pd.read_csv(base+'sector_regime_returns.csv',    index_col=0)
+        sra = pd.read_csv(base+'sector_regime_allocation.csv', index_col=0)
+        rme = pd.read_csv(base+'regime_metrics.csv',           index_col=0)
+    except: rw = srd = sra = rme = None
 
-    log_returns.columns  = log_returns.columns.str.replace('.NS', '', regex=False)
-    prices_clean.columns = prices_clean.columns.str.replace('.NS', '', regex=False)
+    lr.columns = lr.columns.str.replace('.NS','',regex=False)
+    pc.columns = pc.columns.str.replace('.NS','',regex=False)
+    return lr, pc, br, rm, ow, pco, rw, srd, sra, rme
 
-    return (log_returns, prices_clean, benchmark_returns, risk_metrics,
-            optimized_weights, portfolio_comparison,
-            regime_weights, sector_regime_df, sector_regime_alloc, regime_metrics)
-
-# ── Portfolio metrics ─────────────────────────────────────────────────────
 def portfolio_metrics(weights, mean_returns, cov_matrix, rf=RISK_FREE_RATE_ANNUAL):
-    weights     = np.array(weights)
-    port_return = np.dot(weights, mean_returns)
-    port_var    = np.dot(weights.T, np.dot(cov_matrix, weights))
-    port_vol    = np.sqrt(port_var)
-    sharpe      = (port_return - rf) / port_vol if port_vol > 0 else 0
-    return port_return, port_vol, sharpe
+    w   = np.array(weights)
+    ret = np.dot(w, mean_returns)
+    vol = np.sqrt(np.dot(w.T, np.dot(cov_matrix, w)))
+    sh  = (ret - rf) / vol if vol > 0 else 0
+    return ret, vol, sh
 
 @st.cache_data
-def run_monte_carlo(_log_returns, n=5000):
-    mean_ret = _log_returns.mean() * TRADING_DAYS
-    cov_mat  = _log_returns.cov()  * TRADING_DAYS
-    n_assets = len(mean_ret)
+def run_monte_carlo(_lr, n=5000):
+    mu  = _lr.mean() * TRADING_DAYS
+    cov = _lr.cov()  * TRADING_DAYS
+    na  = len(mu)
     np.random.seed(42)
-    results = []
+    rows = []
     for _ in range(n):
-        w = np.random.dirichlet(np.ones(n_assets))
-        r, v, s = portfolio_metrics(w, mean_ret, cov_mat)
-        results.append({'Return': r*100, 'Volatility': v*100, 'Sharpe': s})
-    return pd.DataFrame(results), mean_ret, cov_mat
+        w = np.random.dirichlet(np.ones(na))
+        r,v,s = portfolio_metrics(w,mu,cov)
+        rows.append({'Return':r*100,'Volatility':v*100,'Sharpe':s})
+    return pd.DataFrame(rows), mu, cov
 
 # ── Load ──────────────────────────────────────────────────────────────────
-(log_returns, prices_clean, benchmark_returns, risk_metrics,
- optimized_weights, portfolio_comparison,
- regime_weights, sector_regime_df, sector_regime_alloc, regime_metrics) = load_data()
+log_returns, prices_clean, benchmark_returns, risk_metrics, \
+optimized_weights, portfolio_comparison, \
+regime_weights, sector_regime_df, sector_regime_alloc, regime_metrics = load_data()
 
 mean_returns = log_returns.mean() * TRADING_DAYS
 cov_matrix   = log_returns.cov()  * TRADING_DAYS
 n_assets     = len(mean_returns)
 tickers      = log_returns.columns.tolist()
-
-# Pre-build regime series once
 daily_rate, daily_regime = build_regime_series(log_returns.index)
 
 # ── Sidebar ───────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.markdown("## 📈 Portfolio Risk Engine")
-    st.markdown("**Nifty 50 Universe | 2019–2025**")
+    st.markdown(f"<div style='color:{GOLD};font-size:1.1rem;font-weight:600;letter-spacing:0.04em;'>📈 PORTFOLIO RISK ENGINE</div>", unsafe_allow_html=True)
+    st.markdown(f"<div style='color:{TEXT_SEC};font-size:0.78rem;margin-top:2px;margin-bottom:1rem;'>Nifty 50 Universe | 2019–2025</div>", unsafe_allow_html=True)
     st.divider()
-    page = st.radio(
-        "Navigate",
-        ["🏠 Overview", "⚠️ Risk Analytics", "🎯 Optimization",
-         "🏛️ Macro Overlay", "🔍 Stock Explorer"],
-        label_visibility="collapsed"
-    )
+    page = st.radio("Navigate",
+        ["🏠  Overview", "⚠️  Risk Analytics", "🎯  Optimization",
+         "🏛️  Macro Overlay", "🔍  Stock Explorer"],
+        label_visibility="collapsed")
     st.divider()
-    st.markdown("**Data sources**")
+    st.markdown(f"<div style='color:{TEXT_SEC};font-size:0.75rem;'>Data sources</div>", unsafe_allow_html=True)
     st.caption("• Yahoo Finance (NSE)")
     st.caption("• RBI DBIE (repo rate)")
     st.divider()
-    st.caption("Built by Pratham | MBA Finance")
-    st.caption("Northcard Capital Analytics")
+    st.markdown(f"<div style='color:{TEXT_SEC};font-size:0.75rem;'>Built by Pratham<br>MBA Finance · Northcard Capital</div>", unsafe_allow_html=True)
+
+def section(title):
+    st.markdown(f'<div class="section-header">{title}</div>', unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════════════
 # PAGE 1 — OVERVIEW
 # ══════════════════════════════════════════════════════════════════════════
-if page == "🏠 Overview":
-    st.title("Indian Equity Portfolio Risk & Optimization Engine")
-    st.markdown("**Nifty 50 Universe · 2019–2025 · RBI Macro Overlay**")
+if page == "🏠  Overview":
+    st.markdown(f"<h1 style='color:{TEXT_PRI};margin-bottom:4px;'>Indian Equity Portfolio Risk & Optimization Engine</h1>", unsafe_allow_html=True)
+    st.markdown(f"<p style='color:{TEXT_SEC};margin-top:0;'>Nifty 50 Universe · 2019–2025 · RBI Macro Overlay</p>", unsafe_allow_html=True)
     st.divider()
 
     bench_ret    = float(benchmark_returns.mean()) * TRADING_DAYS
     bench_vol    = float(benchmark_returns.std())  * np.sqrt(TRADING_DAYS)
     bench_sharpe = (bench_ret - RISK_FREE_RATE_ANNUAL) / bench_vol
 
-    c1, c2, c3, c4, c5 = st.columns(5)
+    c1,c2,c3,c4,c5 = st.columns(5)
     c1.metric("Universe",     f"{n_assets} stocks",    "Nifty 50")
     c2.metric("Period",       "6 years",               "2019–2025")
     c3.metric("Nifty Return", f"{bench_ret*100:.1f}%", "Annualised")
@@ -204,303 +250,289 @@ if page == "🏠 Overview":
     c5.metric("Nifty Sharpe", f"{bench_sharpe:.2f}",   "vs 6.5% rf")
 
     st.divider()
-    st.markdown('<div class="section-header">Market Performance — Nifty 50 vs Top Stocks</div>', unsafe_allow_html=True)
+    section("Market Performance — Nifty 50 vs Top Stocks")
 
-    top_stocks  = (log_returns.mean() * TRADING_DAYS).sort_values(ascending=False).head(6).index.tolist()
-    norm_prices = (prices_clean[top_stocks] / prices_clean[top_stocks].iloc[0]) * 100
-
-    fig = go.Figure()
-    colors = px.colors.qualitative.Plotly
-    for i, col in enumerate(top_stocks):
-        fig.add_trace(go.Scatter(x=norm_prices.index, y=norm_prices[col],
-                                 name=col, line=dict(width=1.8, color=colors[i]), opacity=0.85))
-    nifty_norm = (1 + benchmark_returns).cumprod() * 100
-    nifty_norm = nifty_norm.reindex(norm_prices.index).ffill()
-    fig.add_trace(go.Scatter(x=nifty_norm.index, y=nifty_norm.values,
-                             name='Nifty 50', line=dict(width=2.5, color='white', dash='dash')))
-    fig.update_layout(template='plotly_dark', height=420,
-                      legend=dict(orientation='h', yanchor='bottom', y=1.02),
-                      margin=dict(l=0, r=0, t=30, b=0),
+    top    = (log_returns.mean()*TRADING_DAYS).sort_values(ascending=False).head(6).index.tolist()
+    norm   = (prices_clean[top] / prices_clean[top].iloc[0]) * 100
+    fig    = go.Figure()
+    for i,col in enumerate(top):
+        fig.add_trace(go.Scatter(x=norm.index, y=norm[col], name=col,
+                                 line=dict(width=1.8, color=PLOTLY_COLORS[i]), opacity=0.9))
+    nb = (1+benchmark_returns).cumprod()*100
+    nb = nb.reindex(norm.index).ffill()
+    fig.add_trace(go.Scatter(x=nb.index, y=nb.values, name='Nifty 50',
+                             line=dict(width=2.5, color='white', dash='dash')))
+    fig.update_layout(**PLOTLY_LAYOUT, height=420,
+                      legend=dict(**PLOTLY_LAYOUT['legend'], orientation='h', y=1.05),
                       yaxis_title='Indexed (base=100)', hovermode='x unified')
     st.plotly_chart(fig, use_container_width=True)
 
     st.divider()
-    st.markdown('<div class="section-header">Portfolio Strategy Comparison</div>', unsafe_allow_html=True)
-    st.dataframe(portfolio_comparison, use_container_width=True)
+    section("Portfolio Strategy Comparison")
+    st.dataframe(portfolio_comparison.style
+                 .format({'Annual Return %':'{:.2f}','Annual Vol %':'{:.2f}','Sharpe Ratio':'{:.3f}'})
+                 .background_gradient(subset=['Sharpe Ratio'], cmap='YlOrBr'),
+                 use_container_width=True)
 
 # ══════════════════════════════════════════════════════════════════════════
 # PAGE 2 — RISK ANALYTICS
 # ══════════════════════════════════════════════════════════════════════════
-elif page == "⚠️ Risk Analytics":
-    st.title("Risk Analytics")
+elif page == "⚠️  Risk Analytics":
+    st.markdown(f"<h1 style='color:{TEXT_PRI};'>Risk Analytics</h1>", unsafe_allow_html=True)
     st.divider()
 
-    selected = st.multiselect(
-        "Select stocks to analyse",
-        options=tickers,
-        default=['RELIANCE', 'TCS', 'HDFCBANK', 'INFY', 'SBIN']
-    )
+    selected = st.multiselect("Select stocks to analyse", options=tickers,
+                              default=['RELIANCE','TCS','HDFCBANK','INFY','SBIN'])
     if not selected:
         st.warning("Please select at least one stock.")
         st.stop()
 
     col1, col2 = st.columns(2)
-
     with col1:
-        st.markdown('<div class="section-header">Rolling 21-day Volatility (Annualised)</div>', unsafe_allow_html=True)
-        roll_vol = log_returns[selected].rolling(21).std() * np.sqrt(TRADING_DAYS) * 100
+        section("Rolling 21-day Volatility (Annualised)")
+        rv  = log_returns[selected].rolling(21).std() * np.sqrt(TRADING_DAYS) * 100
         fig = go.Figure()
-        for i, s in enumerate(selected):
-            fig.add_trace(go.Scatter(x=roll_vol.index, y=roll_vol[s], name=s, line=dict(width=1.5)))
-        fig.update_layout(template='plotly_dark', height=340,
-                          yaxis_title='Vol (%)', margin=dict(l=0,r=0,t=10,b=0),
-                          hovermode='x unified', legend=dict(orientation='h', y=1.1))
+        for i,s in enumerate(selected):
+            fig.add_trace(go.Scatter(x=rv.index, y=rv[s], name=s,
+                                     line=dict(width=1.5, color=PLOTLY_COLORS[i])))
+        fig.update_layout(**PLOTLY_LAYOUT, height=340, yaxis_title='Vol (%)',
+                          hovermode='x unified', legend=dict(**PLOTLY_LAYOUT['legend'], orientation='h', y=1.1))
         st.plotly_chart(fig, use_container_width=True)
 
     with col2:
-        st.markdown('<div class="section-header">Drawdown from Peak</div>', unsafe_allow_html=True)
+        section("Drawdown from Peak")
         fig = go.Figure()
-        for s in selected:
-            cum = (1 + prices_clean[s].pct_change()).cumprod()
+        for i,s in enumerate(selected):
+            cum = (1+prices_clean[s].pct_change()).cumprod()
             dd  = (cum - cum.cummax()) / cum.cummax() * 100
             fig.add_trace(go.Scatter(x=dd.index, y=dd, name=s,
-                                     line=dict(width=1.5), fill='tozeroy', opacity=0.4))
-        fig.update_layout(template='plotly_dark', height=340,
-                          yaxis_title='Drawdown (%)', margin=dict(l=0,r=0,t=10,b=0),
-                          hovermode='x unified', legend=dict(orientation='h', y=1.1))
+                                     line=dict(width=1.5, color=PLOTLY_COLORS[i]),
+                                     fill='tozeroy', opacity=0.5))
+        fig.update_layout(**PLOTLY_LAYOUT, height=340, yaxis_title='Drawdown (%)',
+                          hovermode='x unified', legend=dict(**PLOTLY_LAYOUT['legend'], orientation='h', y=1.1))
         st.plotly_chart(fig, use_container_width=True)
 
     st.divider()
-    st.markdown('<div class="section-header">Risk Metrics Summary</div>', unsafe_allow_html=True)
-    available = [s for s in selected if s in risk_metrics.index]
-    if available:
-        st.dataframe(risk_metrics.loc[available].style.format('{:.3f}'), use_container_width=True)
+    section("Risk Metrics Summary")
+    avail = [s for s in selected if s in risk_metrics.index]
+    if avail:
+        st.dataframe(risk_metrics.loc[avail].style.format('{:.3f}')
+                     .background_gradient(subset=['Sharpe ratio'], cmap='YlOrBr'),
+                     use_container_width=True)
 
     st.divider()
-    st.markdown('<div class="section-header">Value at Risk — Historical vs Parametric (95%)</div>', unsafe_allow_html=True)
-    var_data = []
+    section("Value at Risk — Historical vs Parametric (95%)")
+    vd = []
     for s in selected:
         r     = log_returns[s].dropna()
-        h_var = -np.percentile(r, 5) * 100
-        p_var = -(r.mean() + scipy_norm.ppf(0.05) * r.std()) * 100
-        var_data.append({'Stock': s, 'Historical VaR 95%': h_var, 'Parametric VaR 95%': p_var})
-    var_df = pd.DataFrame(var_data).set_index('Stock')
+        h_var = -np.percentile(r,5)*100
+        p_var = -(r.mean()+scipy_norm.ppf(0.05)*r.std())*100
+        vd.append({'Stock':s,'Historical VaR 95%':h_var,'Parametric VaR 95%':p_var})
+    vdf = pd.DataFrame(vd).set_index('Stock')
     fig = go.Figure()
-    fig.add_trace(go.Bar(name='Historical VaR 95%', x=var_df.index,
-                         y=var_df['Historical VaR 95%'], marker_color='#f87171'))
-    fig.add_trace(go.Bar(name='Parametric VaR 95%', x=var_df.index,
-                         y=var_df['Parametric VaR 95%'], marker_color='#60a5fa'))
-    fig.update_layout(template='plotly_dark', height=340, barmode='group',
-                      yaxis_title='Daily VaR (%)', margin=dict(l=0,r=0,t=10,b=0))
+    fig.add_trace(go.Bar(name='Historical VaR 95%', x=vdf.index, y=vdf['Historical VaR 95%'], marker_color=ACCENT3))
+    fig.add_trace(go.Bar(name='Parametric VaR 95%', x=vdf.index, y=vdf['Parametric VaR 95%'], marker_color=ACCENT1))
+    fig.update_layout(**PLOTLY_LAYOUT, height=340, barmode='group', yaxis_title='Daily VaR (%)')
     st.plotly_chart(fig, use_container_width=True)
 
 # ══════════════════════════════════════════════════════════════════════════
 # PAGE 3 — OPTIMIZATION
 # ══════════════════════════════════════════════════════════════════════════
-elif page == "🎯 Optimization":
-    st.title("Portfolio Optimization")
+elif page == "🎯  Optimization":
+    st.markdown(f"<h1 style='color:{TEXT_PRI};'>Portfolio Optimization</h1>", unsafe_allow_html=True)
     st.divider()
 
     with st.spinner("Running Monte Carlo simulation (5,000 portfolios)..."):
         mc_df, mean_ret, cov_mat = run_monte_carlo(log_returns)
 
-    mvp_weights = optimized_weights['MVP weight'].values
-    msr_weights = optimized_weights['Max Sharpe weight'].values
-    eq_weights  = np.array([1/n_assets]*n_assets)
+    mvp_w = optimized_weights['MVP weight'].values
+    msr_w = optimized_weights['Max Sharpe weight'].values
+    eq_w  = np.array([1/n_assets]*n_assets)
 
-    mvp_ret, mvp_vol, mvp_sharpe = portfolio_metrics(mvp_weights, mean_ret, cov_mat)
-    msr_ret, msr_vol, msr_sharpe = portfolio_metrics(msr_weights, mean_ret, cov_mat)
-    eq_ret,  eq_vol,  eq_sharpe  = portfolio_metrics(eq_weights,  mean_ret, cov_mat)
-    bench_ret    = float(benchmark_returns.mean()) * TRADING_DAYS
-    bench_vol    = float(benchmark_returns.std())  * np.sqrt(TRADING_DAYS)
-    bench_sharpe = (bench_ret - RISK_FREE_RATE_ANNUAL) / bench_vol
+    mvp_ret,mvp_vol,mvp_sh = portfolio_metrics(mvp_w, mean_ret, cov_mat)
+    msr_ret,msr_vol,msr_sh = portfolio_metrics(msr_w, mean_ret, cov_mat)
+    eq_ret, eq_vol, eq_sh  = portfolio_metrics(eq_w,  mean_ret, cov_mat)
+    br     = float(benchmark_returns.mean())*TRADING_DAYS
+    bv     = float(benchmark_returns.std())*np.sqrt(TRADING_DAYS)
+    bsh    = (br-RISK_FREE_RATE_ANNUAL)/bv
 
-    st.markdown('<div class="section-header">Efficient Frontier — Nifty 50 Universe</div>', unsafe_allow_html=True)
+    section("Efficient Frontier — Nifty 50 Universe")
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=mc_df['Volatility'], y=mc_df['Return'], mode='markers',
-        marker=dict(size=3, color=mc_df['Sharpe'], colorscale='RdYlGn',
-                    showscale=True, colorbar=dict(title='Sharpe'), opacity=0.5),
+        marker=dict(size=3, color=mc_df['Sharpe'], colorscale='YlOrBr',
+                    showscale=True, colorbar=dict(title='Sharpe',tickfont=dict(color=TEXT_PRI)), opacity=0.45),
         name='Random portfolios',
         hovertemplate='Vol: %{x:.1f}%<br>Return: %{y:.1f}%<extra></extra>'
     ))
-    points = [
-        (mvp_vol*100, mvp_ret*100, f'Min Variance<br>Sharpe: {mvp_sharpe:.2f}', 'diamond', '#60a5fa', 16),
-        (msr_vol*100, msr_ret*100, f'Max Sharpe<br>Sharpe: {msr_sharpe:.2f}',   'star',    '#fbbf24', 20),
-        (bench_vol*100, bench_ret*100, f'Nifty 50<br>Sharpe: {bench_sharpe:.2f}','cross',  '#f87171', 16),
-        (eq_vol*100,  eq_ret*100,  f'Equal Weight<br>Sharpe: {eq_sharpe:.2f}',  'square',  '#a78bfa', 12),
+    pts = [
+        (mvp_vol*100,mvp_ret*100,f'Min Variance<br>Sharpe: {mvp_sh:.2f}','diamond',ACCENT1,16),
+        (msr_vol*100,msr_ret*100,f'Max Sharpe<br>Sharpe: {msr_sh:.2f}','star',GOLD,22),
+        (bv*100,     br*100,     f'Nifty 50<br>Sharpe: {bsh:.2f}',     'cross', ACCENT3,16),
+        (eq_vol*100, eq_ret*100, f'Equal Weight<br>Sharpe: {eq_sh:.2f}','square',ACCENT4,12),
     ]
-    labels = ['Min Variance', 'Max Sharpe ★', 'Nifty 50', 'Equal Weight']
-    for (vx, vy, tip, sym, col, sz), lbl in zip(points, labels):
-        fig.add_trace(go.Scatter(
-            x=[vx], y=[vy], mode='markers+text',
-            marker=dict(symbol=sym, size=sz, color=col, line=dict(color='white', width=1)),
-            text=[lbl], textposition='top center', textfont=dict(size=10, color=col),
-            name=lbl, hovertemplate=tip+'<extra></extra>'
-        ))
-    cml_x = np.linspace(0, msr_vol*1.6, 100)
-    cml_y = RISK_FREE_RATE_ANNUAL + msr_sharpe * cml_x
-    fig.add_trace(go.Scatter(x=cml_x*100, y=cml_y*100, mode='lines',
-                             line=dict(dash='dash', color='white', width=1.5),
-                             name='Capital Market Line', opacity=0.6))
-    fig.update_layout(template='plotly_dark', height=550,
+    lbs = ['Min Variance','Max Sharpe ★','Nifty 50','Equal Weight']
+    for (vx,vy,tip,sym,col,sz),lbl in zip(pts,lbs):
+        fig.add_trace(go.Scatter(x=[vx],y=[vy],mode='markers+text',
+            marker=dict(symbol=sym,size=sz,color=col,line=dict(color='white',width=1)),
+            text=[lbl],textposition='top center',textfont=dict(size=10,color=col),
+            name=lbl,hovertemplate=tip+'<extra></extra>'))
+    cx = np.linspace(0, msr_vol*1.6, 100)
+    cy = RISK_FREE_RATE_ANNUAL + msr_sh*cx
+    fig.add_trace(go.Scatter(x=cx*100,y=cy*100,mode='lines',
+        line=dict(dash='dash',color=GOLD_DIM,width=1.5),name='Capital Market Line',opacity=0.7))
+    fig.update_layout(**PLOTLY_LAYOUT, height=550,
                       xaxis_title='Annual Volatility (%)', yaxis_title='Annual Return (%)',
-                      margin=dict(l=0,r=0,t=10,b=0), legend=dict(orientation='h', y=-0.15))
+                      legend=dict(**PLOTLY_LAYOUT['legend'], orientation='h', y=-0.15))
     st.plotly_chart(fig, use_container_width=True)
 
     st.divider()
-    st.markdown('<div class="section-header">Optimized Portfolio Weights</div>', unsafe_allow_html=True)
-    tab1, tab2 = st.tabs(["Max Sharpe Portfolio", "Min Variance Portfolio"])
+    section("Optimized Portfolio Weights")
+    tab1,tab2 = st.tabs(["Max Sharpe Portfolio","Min Variance Portfolio"])
 
     with tab1:
-        msr_w = pd.Series(msr_weights, index=tickers).sort_values(ascending=False)
-        msr_nz = msr_w[msr_w > 0.005]
-        fig = px.bar(msr_nz*100, color=msr_nz.index,
-                     labels={'value':'Weight (%)','index':'Stock'},
-                     color_discrete_sequence=px.colors.qualitative.Plotly)
-        fig.add_hline(y=100/n_assets, line_dash='dash', line_color='red',
-                      annotation_text=f'Equal weight ({100/n_assets:.1f}%)')
-        fig.update_layout(template='plotly_dark', height=360,
-                          showlegend=False, margin=dict(l=0,r=0,t=10,b=0))
+        s = pd.Series(msr_w, index=tickers).sort_values(ascending=False)
+        s = s[s>0.005]
+        fig = go.Figure(go.Bar(x=s.index, y=s.values*100,
+            marker=dict(color=s.values*100, colorscale='YlOrBr', showscale=False),
+            text=[f'{v:.1f}%' for v in s.values*100], textposition='outside'))
+        fig.add_hline(y=100/n_assets, line_dash='dash', line_color=ACCENT3,
+                      annotation_text=f'Equal weight ({100/n_assets:.1f}%)',
+                      annotation_font_color=ACCENT3)
+        fig.update_layout(**PLOTLY_LAYOUT, height=360, yaxis_title='Weight (%)')
         st.plotly_chart(fig, use_container_width=True)
 
     with tab2:
-        mvp_w = pd.Series(mvp_weights, index=tickers).sort_values(ascending=False)
-        mvp_nz = mvp_w[mvp_w > 0.005]
-        fig = px.bar(mvp_nz*100, color=mvp_nz.index,
-                     labels={'value':'Weight (%)','index':'Stock'},
-                     color_discrete_sequence=px.colors.qualitative.Safe)
-        fig.add_hline(y=100/n_assets, line_dash='dash', line_color='red',
-                      annotation_text=f'Equal weight ({100/n_assets:.1f}%)')
-        fig.update_layout(template='plotly_dark', height=360,
-                          showlegend=False, margin=dict(l=0,r=0,t=10,b=0))
+        s = pd.Series(mvp_w, index=tickers).sort_values(ascending=False)
+        s = s[s>0.005]
+        fig = go.Figure(go.Bar(x=s.index, y=s.values*100,
+            marker=dict(color=s.values*100, colorscale='Blues', showscale=False),
+            text=[f'{v:.1f}%' for v in s.values*100], textposition='outside'))
+        fig.add_hline(y=100/n_assets, line_dash='dash', line_color=ACCENT3,
+                      annotation_text=f'Equal weight ({100/n_assets:.1f}%)',
+                      annotation_font_color=ACCENT3)
+        fig.update_layout(**PLOTLY_LAYOUT, height=360, yaxis_title='Weight (%)')
         st.plotly_chart(fig, use_container_width=True)
 
     st.divider()
-    st.markdown('<div class="section-header">Cumulative Return Backtest (Static Weights)</div>', unsafe_allow_html=True)
-    msr_daily = log_returns.values @ msr_weights
-    mvp_daily = log_returns.values @ mvp_weights
-    eq_daily  = log_returns.values @ eq_weights
-    min_len   = min(len(log_returns), len(benchmark_returns))
-    dates     = log_returns.index[:min_len]
-    bench_vals = benchmark_returns.values[:min_len]
+    section("Cumulative Return Backtest (Static Weights)")
+    msr_d = log_returns.values @ msr_w
+    mvp_d = log_returns.values @ mvp_w
+    eq_d  = log_returns.values @ eq_w
+    ml    = min(len(log_returns), len(benchmark_returns))
+    dates = log_returns.index[:ml]
+    bv2   = benchmark_returns.values[:ml]
 
-    def cum_ret(x): return (np.exp(np.cumsum(x)) - 1) * 100
+    def cr(x): return (np.exp(np.cumsum(x))-1)*100
 
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=dates, y=cum_ret(msr_daily[:min_len]), name='Max Sharpe',   line=dict(color='#fbbf24', width=2)))
-    fig.add_trace(go.Scatter(x=dates, y=cum_ret(mvp_daily[:min_len]), name='Min Variance', line=dict(color='#60a5fa', width=2)))
-    fig.add_trace(go.Scatter(x=dates, y=cum_ret(eq_daily[:min_len]),  name='Equal Weight', line=dict(color='#a78bfa', width=1.5)))
-    fig.add_trace(go.Scatter(x=dates, y=cum_ret(bench_vals),          name='Nifty 50',     line=dict(color='#f87171', width=2, dash='dash')))
-    fig.add_vline(x='2020-03-23', line_dash='dot', line_color='gray', annotation_text='COVID crash')
-    fig.update_layout(template='plotly_dark', height=400,
-                      yaxis_title='Cumulative Return (%)', margin=dict(l=0,r=0,t=10,b=0),
-                      hovermode='x unified', legend=dict(orientation='h', y=1.1))
+    fig.add_trace(go.Scatter(x=dates,y=cr(msr_d[:ml]),name='Max Sharpe',  line=dict(color=GOLD,   width=2.5)))
+    fig.add_trace(go.Scatter(x=dates,y=cr(mvp_d[:ml]),name='Min Variance',line=dict(color=ACCENT1,width=2)))
+    fig.add_trace(go.Scatter(x=dates,y=cr(eq_d[:ml]), name='Equal Weight',line=dict(color=ACCENT4,width=1.5)))
+    fig.add_trace(go.Scatter(x=dates,y=cr(bv2),       name='Nifty 50',   line=dict(color=ACCENT3,width=2,dash='dash')))
+    fig.add_vline(x='2020-03-23',line_dash='dot',line_color=TEXT_SEC,
+                  annotation_text='COVID crash',annotation_font_color=TEXT_SEC)
+    fig.update_layout(**PLOTLY_LAYOUT, height=400, yaxis_title='Cumulative Return (%)',
+                      hovermode='x unified',
+                      legend=dict(**PLOTLY_LAYOUT['legend'], orientation='h', y=1.1))
     st.plotly_chart(fig, use_container_width=True)
     st.caption("⚠️ In-sample backtest: weights derived from same period. For illustrative purposes only.")
 
 # ══════════════════════════════════════════════════════════════════════════
 # PAGE 4 — MACRO OVERLAY
 # ══════════════════════════════════════════════════════════════════════════
-elif page == "🏛️ Macro Overlay":
-    st.title("RBI Macro Overlay")
+elif page == "🏛️  Macro Overlay":
+    st.markdown(f"<h1 style='color:{TEXT_PRI};'>RBI Macro Overlay</h1>", unsafe_allow_html=True)
     st.divider()
 
     if sector_regime_df is None:
         st.warning("Phase 4 data not found. Run Phase 4 notebook first.")
         st.stop()
 
-    c1, c2, c3 = st.columns(3)
-    c1.markdown('<div style="text-align:center"><span class="regime-tag-cut">CUT REGIME</span><br><small style="color:#8b92a5">551 days · 31.9%</small></div>', unsafe_allow_html=True)
-    c2.markdown('<div style="text-align:center"><span class="regime-tag-hold">HOLD REGIME</span><br><small style="color:#8b92a5">920 days · 53.2%</small></div>', unsafe_allow_html=True)
-    c3.markdown('<div style="text-align:center"><span class="regime-tag-hike">HIKE REGIME</span><br><small style="color:#8b92a5">231 days · 13.4%</small></div>', unsafe_allow_html=True)
+    c1,c2,c3 = st.columns(3)
+    c1.markdown('<div style="text-align:center;padding:0.5rem;"><span class="tag-cut">CUT REGIME</span><br><small style="color:#8b949e;font-size:0.75rem;">551 days · 31.9%</small></div>', unsafe_allow_html=True)
+    c2.markdown('<div style="text-align:center;padding:0.5rem;"><span class="tag-hold">HOLD REGIME</span><br><small style="color:#8b949e;font-size:0.75rem;">920 days · 53.2%</small></div>', unsafe_allow_html=True)
+    c3.markdown('<div style="text-align:center;padding:0.5rem;"><span class="tag-hike">HIKE REGIME</span><br><small style="color:#8b949e;font-size:0.75rem;">231 days · 13.4%</small></div>', unsafe_allow_html=True)
 
     st.divider()
-    st.markdown('<div class="section-header">Nifty 50 vs RBI Repo Rate — Policy Regimes</div>', unsafe_allow_html=True)
+    section("Nifty 50 vs RBI Repo Rate — Policy Regimes")
 
-    nifty_idx = (1 + benchmark_returns).cumprod() * 100
+    nifty_idx = (1+benchmark_returns).cumprod()*100
     nifty_idx = nifty_idx.reindex(log_returns.index).ffill()
 
-    fig = make_subplots(specs=[[{"secondary_y": True}]])
-    fig.add_trace(go.Scatter(x=nifty_idx.index, y=nifty_idx.values,
-                             name='Nifty 50', line=dict(color='#60a5fa', width=2)), secondary_y=False)
-    fig.add_trace(go.Scatter(x=daily_rate.index, y=daily_rate.values,
-                             name='Repo Rate %', line=dict(color='#f87171', width=2, dash='dash')), secondary_y=True)
+    fig = make_subplots(specs=[[{"secondary_y":True}]])
+    fig.add_trace(go.Scatter(x=nifty_idx.index,y=nifty_idx.values,
+                             name='Nifty 50',line=dict(color=GOLD,width=2.2)),secondary_y=False)
+    fig.add_trace(go.Scatter(x=daily_rate.index,y=daily_rate.values,
+                             name='Repo Rate %',line=dict(color=ACCENT3,width=1.8,dash='dash')),secondary_y=True)
 
-    regime_color_map = {
-        'CUT' : 'rgba(74,222,128,0.15)',
-        'HIKE': 'rgba(248,113,113,0.15)',
-        'HOLD': 'rgba(251,191,36,0.1)'
-    }
-    prev_date = log_returns.index[0]; prev_reg = daily_regime.iloc[0]
-    for date, reg in daily_regime.items():
-        if reg != prev_reg:
-            fig.add_vrect(x0=prev_date, x1=date,
-                          fillcolor=regime_color_map.get(prev_reg, 'white'),
-                          layer='below', line_width=0)
-            prev_date = date; prev_reg = reg
-    fig.add_vrect(x0=prev_date, x1=log_returns.index[-1],
-                  fillcolor=regime_color_map.get(prev_reg, 'white'), layer='below', line_width=0)
+    rmap = {'CUT':'rgba(63,185,80,0.12)','HIKE':'rgba(247,129,102,0.12)','HOLD':'rgba(201,168,76,0.08)'}
+    pd_ = log_returns.index[0]; pr_ = daily_regime.iloc[0]
+    for dt,rg in daily_regime.items():
+        if rg != pr_:
+            fig.add_vrect(x0=pd_,x1=dt,fillcolor=rmap.get(pr_,'white'),layer='below',line_width=0)
+            pd_=dt; pr_=rg
+    fig.add_vrect(x0=pd_,x1=log_returns.index[-1],fillcolor=rmap.get(pr_,'white'),layer='below',line_width=0)
 
-    fig.update_layout(template='plotly_dark', height=420,
-                      margin=dict(l=0,r=0,t=10,b=0), hovermode='x unified',
-                      legend=dict(orientation='h', y=1.1))
-    fig.update_yaxes(title_text='Nifty 50 (indexed)', secondary_y=False)
-    fig.update_yaxes(title_text='Repo Rate (%)', secondary_y=True, range=[3, 8])
+    fig.update_layout(**PLOTLY_LAYOUT, height=420, hovermode='x unified',
+                      legend=dict(**PLOTLY_LAYOUT['legend'],orientation='h',y=1.1))
+    fig.update_yaxes(title_text='Nifty 50 (indexed)',secondary_y=False,
+                     gridcolor=BORDER,zerolinecolor=BORDER)
+    fig.update_yaxes(title_text='Repo Rate (%)',secondary_y=True,range=[3,8],
+                     gridcolor=BORDER,zerolinecolor=BORDER)
     st.plotly_chart(fig, use_container_width=True)
 
     st.divider()
-    col1, col2 = st.columns(2)
-
+    col1,col2 = st.columns(2)
     with col1:
-        st.markdown('<div class="section-header">Sector Returns by Regime (%)</div>', unsafe_allow_html=True)
-        fig = px.imshow(sector_regime_df, color_continuous_scale='RdYlGn',
-                        color_continuous_midpoint=0, text_auto='.1f', aspect='auto')
-        fig.update_layout(template='plotly_dark', height=300, margin=dict(l=0,r=0,t=10,b=0))
+        section("Sector Returns by Regime (%)")
+        fig = px.imshow(sector_regime_df,color_continuous_scale='YlOrBr',
+                        color_continuous_midpoint=0,text_auto='.1f',aspect='auto')
+        fig.update_layout(**PLOTLY_LAYOUT, height=300)
         st.plotly_chart(fig, use_container_width=True)
 
     with col2:
-        st.markdown('<div class="section-header">Sector Allocation Shift by Regime</div>', unsafe_allow_html=True)
+        section("Sector Allocation Shift by Regime")
         fig = px.bar(sector_regime_alloc.T, barmode='group',
-                     color_discrete_sequence=px.colors.qualitative.Plotly)
-        fig.update_layout(template='plotly_dark', height=300,
-                          yaxis_title='Allocation (%)', margin=dict(l=0,r=0,t=10,b=0),
-                          legend=dict(orientation='h', y=1.1))
+                     color_discrete_sequence=PLOTLY_COLORS)
+        fig.update_layout(**PLOTLY_LAYOUT, height=300, yaxis_title='Allocation (%)',
+                          legend=dict(**PLOTLY_LAYOUT['legend'],orientation='h',y=1.1))
         st.plotly_chart(fig, use_container_width=True)
 
     if regime_metrics is not None:
         st.divider()
-        st.markdown('<div class="section-header">Optimized Portfolio Metrics per Regime</div>', unsafe_allow_html=True)
-        st.dataframe(regime_metrics.style.format('{:.2f}'), use_container_width=True)
+        section("Optimized Portfolio Metrics per Regime")
+        st.dataframe(regime_metrics.style.format('{:.2f}')
+                     .background_gradient(cmap='YlOrBr'), use_container_width=True)
 
     st.divider()
     st.info("""
-    **📌 Key insights from this data:**
-    - **CUT regime** → Cyclicals lead (Auto +26%, Financials +27%, Materials +32%). Cheap money lifts all boats.
-    - **HOLD regime** → IT +15% outperforms, showing defensive characteristics when macro is neutral.
-    - **HIKE regime** → IT goes negative (−6.5%), reflecting the 2022–23 global tech selloff coinciding with RBI hikes. Consumer staples are the only positive sector (+12.4%).
-    - **Implication** → A macro-aware portfolio rotates toward consumer and pharma when RBI signals hikes, and back toward financials and cyclicals when RBI pivots to cuts.
+**📌 Key insights from the data:**
+- **CUT regime** → Cyclicals lead: Auto +26%, Financials +27%, Materials +32%. Cheap money lifts all boats.
+- **HOLD regime** → IT +15% outperforms, showing defensive characteristics when macro is neutral.
+- **HIKE regime** → IT goes negative (−6.5%), reflecting the 2022–23 global tech selloff. Consumer staples the only positive sector (+12.4%).
+- **Implication** → A macro-aware portfolio rotates toward consumer and pharma when RBI signals hikes, and back toward financials and cyclicals when RBI pivots to cuts.
     """)
 
 # ══════════════════════════════════════════════════════════════════════════
 # PAGE 5 — STOCK EXPLORER
 # ══════════════════════════════════════════════════════════════════════════
-elif page == "🔍 Stock Explorer":
-    st.title("Stock Explorer")
+elif page == "🔍  Stock Explorer":
+    st.markdown(f"<h1 style='color:{TEXT_PRI};'>Stock Explorer</h1>", unsafe_allow_html=True)
     st.divider()
 
     stock  = st.selectbox("Select a stock", options=tickers,
                           index=tickers.index('RELIANCE') if 'RELIANCE' in tickers else 0)
-    sector = SECTOR_MAP.get(stock, 'Unknown')
+    sector = SECTOR_MAP.get(stock,'Unknown')
 
     r       = log_returns[stock].dropna()
-    ann_ret = r.mean() * TRADING_DAYS * 100
-    ann_vol = r.std()  * np.sqrt(TRADING_DAYS) * 100
-    sharpe  = (ann_ret/100 - RISK_FREE_RATE_ANNUAL) / (ann_vol/100)
-    var95   = -np.percentile(r, 5) * 100
-    mdd_val = ((prices_clean[stock] / prices_clean[stock].cummax()) - 1).min() * 100
+    ann_ret = r.mean()*TRADING_DAYS*100
+    ann_vol = r.std()*np.sqrt(TRADING_DAYS)*100
+    sharpe  = (ann_ret/100-RISK_FREE_RATE_ANNUAL)/(ann_vol/100)
+    var95   = -np.percentile(r,5)*100
+    mdd_val = ((prices_clean[stock]/prices_clean[stock].cummax())-1).min()*100
 
-    c1, c2, c3, c4, c5 = st.columns(5)
+    c1,c2,c3,c4,c5 = st.columns(5)
     c1.metric("Sector",        sector)
     c2.metric("Annual Return", f"{ann_ret:.1f}%")
     c3.metric("Annual Vol",    f"{ann_vol:.1f}%")
@@ -508,53 +540,51 @@ elif page == "🔍 Stock Explorer":
     c5.metric("Max Drawdown",  f"{mdd_val:.1f}%")
 
     st.divider()
-    col1, col2 = st.columns(2)
+    col1,col2 = st.columns(2)
 
     with col1:
-        st.markdown(f'<div class="section-header">{stock} — Price History</div>', unsafe_allow_html=True)
+        section(f"{stock} — Price History")
         fig = go.Figure()
-        fig.add_trace(go.Scatter(x=prices_clean.index, y=prices_clean[stock],
-                                 fill='tozeroy', line=dict(color='#60a5fa', width=1.5),
-                                 fillcolor='rgba(96,165,250,0.1)'))
-        fig.update_layout(template='plotly_dark', height=340,
-                          yaxis_title='Price (INR)', margin=dict(l=0,r=0,t=10,b=0))
+        fig.add_trace(go.Scatter(x=prices_clean.index,y=prices_clean[stock],
+                                 fill='tozeroy',line=dict(color=GOLD,width=1.8),
+                                 fillcolor=f'{GOLD}18'))
+        fig.update_layout(**PLOTLY_LAYOUT, height=340, yaxis_title='Price (INR)')
         st.plotly_chart(fig, use_container_width=True)
 
     with col2:
-        st.markdown(f'<div class="section-header">{stock} — Return Distribution</div>', unsafe_allow_html=True)
+        section(f"{stock} — Return Distribution")
         fig = go.Figure()
-        fig.add_trace(go.Histogram(x=r*100, nbinsx=80, name='Actual',
-                                   marker_color='#60a5fa', opacity=0.7, histnorm='probability density'))
-        x_range = np.linspace(r.min()*100, r.max()*100, 200)
-        fig.add_trace(go.Scatter(x=x_range,
-                                 y=scipy_norm.pdf(x_range, r.mean()*100, r.std()*100),
-                                 name='Normal fit', line=dict(color='#f87171', width=2)))
-        fig.add_vline(x=-var95, line_dash='dot', line_color='#fbbf24',
-                      annotation_text=f'VaR 95%: {var95:.2f}%')
-        fig.update_layout(template='plotly_dark', height=340,
-                          xaxis_title='Daily return (%)', margin=dict(l=0,r=0,t=10,b=0))
+        fig.add_trace(go.Histogram(x=r*100,nbinsx=80,name='Actual',
+                                   marker_color=GOLD,opacity=0.7,histnorm='probability density'))
+        xr = np.linspace(r.min()*100,r.max()*100,200)
+        fig.add_trace(go.Scatter(x=xr,y=scipy_norm.pdf(xr,r.mean()*100,r.std()*100),
+                                 name='Normal fit',line=dict(color=ACCENT3,width=2)))
+        fig.add_vline(x=-var95,line_dash='dot',line_color=ACCENT1,
+                      annotation_text=f'VaR 95%: {var95:.2f}%',
+                      annotation_font_color=ACCENT1)
+        fig.update_layout(**PLOTLY_LAYOUT, height=340, xaxis_title='Daily return (%)')
         st.plotly_chart(fig, use_container_width=True)
 
     st.divider()
-    st.markdown(f'<div class="section-header">{stock} — Performance by RBI Regime</div>', unsafe_allow_html=True)
+    section(f"{stock} — Performance by RBI Regime")
 
-    regime_perf = {}
-    for reg in ['CUT', 'HOLD', 'HIKE']:
+    rp = {}
+    for reg in ['CUT','HOLD','HIKE']:
         mask = daily_regime == reg
-        regime_perf[reg] = {
-            'Ann. Return %': round(log_returns[stock][mask].mean() * TRADING_DAYS * 100, 2),
-            'Ann. Vol %'   : round(log_returns[stock][mask].std()  * np.sqrt(TRADING_DAYS) * 100, 2),
+        rp[reg] = {
+            'Ann. Return %': round(log_returns[stock][mask].mean()*TRADING_DAYS*100,2),
+            'Ann. Vol %'   : round(log_returns[stock][mask].std()*np.sqrt(TRADING_DAYS)*100,2),
             'Days'         : int(mask.sum())
         }
-
-    regime_perf_df = pd.DataFrame(regime_perf).T
-    col1, col2 = st.columns([1, 2])
+    rpdf = pd.DataFrame(rp).T
+    col1,col2 = st.columns([1,2])
     with col1:
-        st.dataframe(regime_perf_df, use_container_width=True)
+        st.dataframe(rpdf, use_container_width=True)
     with col2:
-        fig = px.bar(regime_perf_df, y='Ann. Return %',
-                     color=regime_perf_df.index,
-                     color_discrete_map={'CUT':'#4ade80','HOLD':'#fbbf24','HIKE':'#f87171'})
-        fig.update_layout(template='plotly_dark', height=250,
-                          showlegend=False, margin=dict(l=0,r=0,t=10,b=0))
+        fig = go.Figure(go.Bar(
+            x=rpdf.index, y=rpdf['Ann. Return %'],
+            marker_color=[{'CUT':ACCENT2,'HOLD':GOLD,'HIKE':ACCENT3}[r] for r in rpdf.index],
+            text=[f'{v:.1f}%' for v in rpdf['Ann. Return %']], textposition='outside'
+        ))
+        fig.update_layout(**PLOTLY_LAYOUT, height=260, yaxis_title='Ann. Return (%)', showlegend=False)
         st.plotly_chart(fig, use_container_width=True)
