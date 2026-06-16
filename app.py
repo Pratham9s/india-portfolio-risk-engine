@@ -89,12 +89,8 @@ st.markdown(f"""
   /* ── Dividers ── */
   hr {{ border-color: {BORDER}; opacity: 0.5; }}
 
-  /* ── Dataframe — force dark background ── */
-  .stDataFrame {{ background: {BG_CARD} !important; border: 0.5px solid {BORDER}; border-radius: 8px; }}
-  .stDataFrame iframe {{ background: {BG_CARD} !important; }}
-  div[data-testid="stDataFrameResizable"] {{ background: {BG_CARD} !important; }}
-  div[data-testid="stDataFrameResizable"] * {{ background-color: {BG_CARD} !important; color: {TEXT_PRI} !important; }}
-  .dvn-scroller {{ background: {BG_CARD} !important; }}
+  /* ── Dataframe ── */
+  .stDataFrame {{ border: 0.5px solid {BORDER}; border-radius: 8px; }}
 
   /* ── Regime tags ── */
   .tag-cut  {{ background:#1a3a1a; color:#3fb950; padding:3px 12px; border-radius:12px; font-size:0.78rem; font-weight:500; border:0.5px solid #3fb95066; }}
@@ -282,8 +278,7 @@ if page == "🏠  Overview":
     st.divider()
     section("Portfolio Strategy Comparison")
     st.dataframe(portfolio_comparison.style
-                 .format({'Annual Return %':'{:.2f}','Annual Vol %':'{:.2f}','Sharpe Ratio':'{:.3f}'})
-                 .background_gradient(subset=['Sharpe Ratio'], cmap='YlOrBr'),
+                 .format({'Annual Return %':'{:.2f}','Annual Vol %':'{:.2f}','Sharpe Ratio':'{:.3f}'}),
                  use_container_width=True)
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -328,8 +323,7 @@ elif page == "⚠️  Risk Analytics":
     section("Risk Metrics Summary")
     avail = [s for s in selected if s in risk_metrics.index]
     if avail:
-        st.dataframe(risk_metrics.loc[avail].style.format('{:.3f}')
-                     .background_gradient(subset=['Sharpe ratio'], cmap='YlOrBr'),
+        st.dataframe(risk_metrics.loc[avail].style.format('{:.3f}'),
                      use_container_width=True)
 
     st.divider()
@@ -514,8 +508,8 @@ elif page == "🏛️  Macro Overlay":
     if regime_metrics is not None:
         st.divider()
         section("Optimized Portfolio Metrics per Regime")
-        st.dataframe(regime_metrics.style.format('{:.2f}')
-                     .background_gradient(cmap='YlOrBr'), use_container_width=True)
+        st.dataframe(regime_metrics.style.format('{:.2f}'),
+                     use_container_width=True)
 
     st.divider()
     st.info("""
