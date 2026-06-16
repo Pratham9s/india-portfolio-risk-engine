@@ -76,8 +76,11 @@ st.markdown(f"""
   .stTabs [aria-selected="true"] {{ color: {GOLD} !important; border-bottom: 2px solid {GOLD} !important; }}
 
   /* ── Selectbox / Multiselect ── */
-  .stMultiSelect [data-baseweb="tag"] {{ background: {GOLD_DIM}22; border: 0.5px solid {GOLD_DIM}; }}
+  .stMultiSelect [data-baseweb="tag"] {{ background: #3a2e0a; border: 0.5px solid {GOLD}; color: {GOLD} !important; }}
+  .stMultiSelect [data-baseweb="tag"] span {{ color: {GOLD} !important; }}
+  .stMultiSelect [data-baseweb="tag"] svg {{ fill: {GOLD} !important; }}
   div[data-baseweb="select"] {{ background: {BG_CARD}; }}
+  div[data-baseweb="select"] input {{ color: {TEXT_PRI} !important; }}
 
   /* ── Sidebar radio ── */
   .stRadio label {{ color: {TEXT_SEC}; font-size: 0.9rem; }}
@@ -86,8 +89,12 @@ st.markdown(f"""
   /* ── Dividers ── */
   hr {{ border-color: {BORDER}; opacity: 0.5; }}
 
-  /* ── Dataframe ── */
-  .stDataFrame {{ background: {BG_CARD}; border: 0.5px solid {BORDER}; border-radius: 8px; }}
+  /* ── Dataframe — force dark background ── */
+  .stDataFrame {{ background: {BG_CARD} !important; border: 0.5px solid {BORDER}; border-radius: 8px; }}
+  .stDataFrame iframe {{ background: {BG_CARD} !important; }}
+  div[data-testid="stDataFrameResizable"] {{ background: {BG_CARD} !important; }}
+  div[data-testid="stDataFrameResizable"] * {{ background-color: {BG_CARD} !important; color: {TEXT_PRI} !important; }}
+  .dvn-scroller {{ background: {BG_CARD} !important; }}
 
   /* ── Regime tags ── */
   .tag-cut  {{ background:#1a3a1a; color:#3fb950; padding:3px 12px; border-radius:12px; font-size:0.78rem; font-weight:500; border:0.5px solid #3fb95066; }}
@@ -105,10 +112,15 @@ PLOTLY_LAYOUT = dict(
     paper_bgcolor=BG_CARD,
     plot_bgcolor=BG_CARD,
     font=dict(color=TEXT_PRI, family="Inter, sans-serif", size=12),
-    xaxis=dict(gridcolor=BORDER, zerolinecolor=BORDER, linecolor=BORDER),
-    yaxis=dict(gridcolor=BORDER, zerolinecolor=BORDER, linecolor=BORDER),
+    xaxis=dict(
+        gridcolor=BORDER, zerolinecolor=BORDER, linecolor=BORDER,
+        tickfont=dict(color=TEXT_PRI), title_font=dict(color=TEXT_SEC)
+    ),
+    yaxis=dict(
+        gridcolor=BORDER, zerolinecolor=BORDER, linecolor=BORDER,
+        tickfont=dict(color=TEXT_PRI), title_font=dict(color=TEXT_SEC)
+    ),
     margin=dict(l=0, r=0, t=10, b=0),
-
     colorway=PLOTLY_COLORS,
 )
 
@@ -547,7 +559,7 @@ elif page == "🔍  Stock Explorer":
         fig = go.Figure()
         fig.add_trace(go.Scatter(x=prices_clean.index,y=prices_clean[stock],
                                  fill='tozeroy',line=dict(color=GOLD,width=1.8),
-                                 fillcolor=f'{GOLD}18'))
+                                 fillcolor='rgba(201,168,76,0.08)'))
         fig.update_layout(**PLOTLY_LAYOUT, height=340, yaxis_title='Price (INR)')
         st.plotly_chart(fig, use_container_width=True)
 
