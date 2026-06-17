@@ -39,6 +39,37 @@ ACCENT4  = "#a78bfa"
 
 PLOTLY_COLORS = [GOLD, ACCENT1, ACCENT2, ACCENT3, ACCENT4, "#ffa657", "#79c0ff", "#56d364"]
 
+def gold_table(df, fmt=None):
+    """Render a dataframe as a themed black & gold HTML table."""
+    styled = f"""
+    <div style="overflow-x:auto; border:0.5px solid {BORDER}; border-radius:8px;">
+    <table style="width:100%; border-collapse:collapse; background:{BG_CARD}; font-size:0.85rem;">
+      <thead>
+        <tr style="border-bottom: 1px solid {GOLD}44;">
+          <th style="padding:10px 14px; text-align:left; color:{GOLD}; font-weight:600;
+                     font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase;
+                     background:{BG_DEEP};">{df.index.name or ''}</th>
+    """
+    for col in df.columns:
+        styled += f'<th style="padding:10px 14px; text-align:right; color:{GOLD}; font-weight:600; font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; background:{BG_DEEP};">{col}</th>'
+    styled += "</tr></thead><tbody>"
+
+    for i, (idx, row) in enumerate(df.iterrows()):
+        bg = BG_CARD if i % 2 == 0 else "#0d1117"
+        styled += f'<tr style="border-bottom:0.5px solid {BORDER}; background:{bg};">'
+        styled += f'<td style="padding:9px 14px; color:{GOLD}; font-weight:500;">{idx}</td>'
+        for col in df.columns:
+            val = row[col]
+            if fmt and col in fmt:
+                val = fmt[col].format(val)
+            elif isinstance(val, float):
+                val = f"{val:.3f}"
+            styled += f'<td style="padding:9px 14px; text-align:right; color:{TEXT_PRI};">{val}</td>'
+        styled += "</tr>"
+
+    styled += "</tbody></table></div>"
+    st.markdown(styled, unsafe_allow_html=True)
+
 st.markdown(f"""
 <style>
   /* ── Global ── */
@@ -277,9 +308,7 @@ if page == "🏠  Overview":
 
     st.divider()
     section("Portfolio Strategy Comparison")
-    st.dataframe(portfolio_comparison.style
-                 .format({'Annual Return %':'{:.2f}','Annual Vol %':'{:.2f}','Sharpe Ratio':'{:.3f}'}),
-                 use_container_width=True)
+    gold_table(portfolio_comparison, fmt={'Annual Return %':'{:.2f}','Annual Vol %':'{:.2f}','Sharpe Ratio':'{:.3f}'})
 
 # ══════════════════════════════════════════════════════════════════════════
 # PAGE 2 — RISK ANALYTICS
@@ -323,8 +352,7 @@ elif page == "⚠️  Risk Analytics":
     section("Risk Metrics Summary")
     avail = [s for s in selected if s in risk_metrics.index]
     if avail:
-        st.dataframe(risk_metrics.loc[avail].style.format('{:.3f}'),
-                     use_container_width=True)
+        gold_table(risk_metrics.loc[avail])
 
     st.divider()
     section("Value at Risk — Historical vs Parametric (95%)")
@@ -508,8 +536,7 @@ elif page == "🏛️  Macro Overlay":
     if regime_metrics is not None:
         st.divider()
         section("Optimized Portfolio Metrics per Regime")
-        st.dataframe(regime_metrics.style.format('{:.2f}'),
-                     use_container_width=True)
+        gold_table(regime_metrics)
 
     st.divider()
     st.info("""
@@ -585,7 +612,7 @@ elif page == "🔍  Stock Explorer":
     rpdf = pd.DataFrame(rp).T
     col1,col2 = st.columns([1,2])
     with col1:
-        st.dataframe(rpdf, use_container_width=True)
+        gold_table(rpdf)
     with col2:
         fig = go.Figure(go.Bar(
             x=rpdf.index, y=rpdf['Ann. Return %'],
